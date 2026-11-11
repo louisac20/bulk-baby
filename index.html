@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bulk Baby</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+    />
+    <script type="module" crossorigin src="./assets/index-DkJEJyhb.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-iEJezkCC.css">
+  </head>
+  <body>
+    <div id="game"></div>
+
+    <div id="hud">
+      <p id="hud-targets" class="hud-pill"></p>
+      <p id="hud-hint" class="hud-pill"></p>
+    </div>
+
+    <div id="scanner-overlay" class="overlay" hidden>
+      <div
+        id="scanner-panel"
+        class="panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="scanner-title"
+        tabindex="-1"
+      >
+        <h2 id="scanner-title">Lab Body Scanner</h2>
+        <p class="hint">Enter your stats to get your daily bulking targets.</p>
+
+        <form id="scanner-form" novalidate>
+          <fieldset aria-describedby="error-sex">
+            <legend>Sex <span class="hint">(used by the calorie formula)</span></legend>
+            <label class="choice"><input type="radio" name="sex" value="male" /> Male</label>
+            <label class="choice"><input type="radio" name="sex" value="female" /> Female</label>
+          </fieldset>
+          <p class="error" id="error-sex"></p>
+
+          <label for="age">Age</label>
+          <input
+            id="age"
+            name="age"
+            type="number"
+            inputmode="numeric"
+            aria-describedby="error-age"
+          />
+          <p class="error" id="error-age"></p>
+
+          <fieldset aria-describedby="error-height">
+            <legend>Height</legend>
+            <div class="row">
+              <label class="unit">
+                <input name="heightFeet" type="number" inputmode="numeric" aria-label="Feet" />
+                ft
+              </label>
+              <label class="unit">
+                <input name="heightInches" type="number" inputmode="decimal" aria-label="Inches" />
+                in
+              </label>
+            </div>
+          </fieldset>
+          <p class="error" id="error-height"></p>
+
+          <label for="weight">Weight (lb)</label>
+          <input
+            id="weight"
+            name="weightPounds"
+            type="number"
+            inputmode="decimal"
+            aria-describedby="error-weight"
+          />
+          <p class="error" id="error-weight"></p>
+
+          <label for="activity">
+            Activity level <span class="hint">(not counting workouts; the Gym adds those)</span>
+          </label>
+          <select id="activity" name="activity" aria-describedby="error-activity">
+            <option value="">Choose one…</option>
+          </select>
+          <p class="error" id="error-activity"></p>
+
+          <label for="weekly-gain">How fast do you want to gain?</label>
+          <select id="weekly-gain" name="weeklyGain" aria-describedby="error-pace">
+            <option value="">Choose one…</option>
+          </select>
+          <p class="error" id="error-pace"></p>
+
+          <button type="submit" class="primary">Scan me</button>
+        </form>
+
+        <section id="scanner-results" class="results" hidden aria-live="polite">
+          <h3>Your daily bulking targets</h3>
+          <p class="big"><span id="result-calories"></span> kcal</p>
+          <ul class="macros">
+            <li><strong id="result-protein"></strong>g protein</li>
+            <li><strong id="result-carbs"></strong>g carbs</li>
+            <li><strong id="result-fat"></strong>g fat</li>
+          </ul>
+          <p id="result-explanation" class="hint"></p>
+          <p id="result-status" class="status"></p>
+        </section>
+
+        <button type="button" id="scanner-close" class="secondary">Back to the map</button>
+      </div>
+    </div>
+
+    <div id="kitchen-overlay" class="overlay" hidden>
+      <div
+        id="kitchen-panel"
+        class="panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="kitchen-title"
+        tabindex="-1"
+      >
+        <h2 id="kitchen-title">Kitchen Stove</h2>
+        <p class="hint">Log what you ate today. Totals start fresh every morning.</p>
+
+        <section aria-labelledby="kitchen-today-title">
+          <h3 id="kitchen-today-title">Today so far</h3>
+          <ul id="kitchen-progress" class="progress-list"></ul>
+          <p id="kitchen-workout-note" class="hint" hidden></p>
+          <p id="kitchen-no-targets" class="hint" hidden>
+            Visit the Lab scanner to set your targets.
+          </p>
+        </section>
+
+        <section aria-labelledby="kitchen-add-title">
+          <h3 id="kitchen-add-title">Add food</h3>
+          <form id="food-search-form" class="search-row" role="search" novalidate>
+            <label for="food-search" class="visually-hidden">Food to search for</label>
+            <input
+              id="food-search"
+              name="query"
+              type="search"
+              placeholder="e.g. chicken breast"
+              autocomplete="off"
+              enterkeyhint="search"
+            />
+            <button type="submit" id="food-search-button" class="primary">Search</button>
+          </form>
+          <p id="food-search-status" class="hint search-status" aria-live="polite"></p>
+          <ul id="food-results" class="food-results"></ul>
+
+          <form id="food-portion-form" class="portion" hidden novalidate>
+            <p id="portion-food-name" class="portion-name"></p>
+            <div class="row">
+              <label class="stacked amount">
+                How many
+                <input
+                  id="portion-amount"
+                  name="amount"
+                  type="number"
+                  inputmode="decimal"
+                  aria-describedby="error-portion"
+                />
+              </label>
+              <label class="stacked portion-unit">
+                Portion
+                <select id="portion-unit" name="unit"></select>
+              </label>
+            </div>
+            <p class="error" id="error-portion"></p>
+            <p id="portion-preview" class="portion-preview" aria-live="polite"></p>
+            <button type="submit" class="primary">Add to today</button>
+            <button type="button" id="portion-back" class="secondary">Pick a different food</button>
+          </form>
+
+          <details id="manual-food">
+            <summary>Can't find it? Enter it yourself</summary>
+            <form id="manual-food-form" novalidate>
+              <label for="manual-name">Food</label>
+              <input
+                id="manual-name"
+                name="name"
+                type="text"
+                maxlength="80"
+                autocomplete="off"
+                aria-describedby="error-name"
+              />
+              <p class="error" id="error-name"></p>
+
+              <label for="manual-calories">Calories (kcal)</label>
+              <input
+                id="manual-calories"
+                name="calories"
+                type="number"
+                inputmode="decimal"
+                aria-describedby="error-calories"
+              />
+              <p class="error" id="error-calories"></p>
+
+              <fieldset aria-describedby="error-macros">
+                <legend>Macros <span class="hint">(grams, blank means 0)</span></legend>
+                <div class="row">
+                  <label class="stacked">
+                    Protein
+                    <input name="protein" type="number" inputmode="decimal" />
+                  </label>
+                  <label class="stacked">
+                    Carbs
+                    <input name="carbs" type="number" inputmode="decimal" />
+                  </label>
+                  <label class="stacked">
+                    Fat
+                    <input name="fat" type="number" inputmode="decimal" />
+                  </label>
+                </div>
+              </fieldset>
+              <p class="error" id="error-macros"></p>
+
+              <button type="submit" class="primary">Add to today</button>
+            </form>
+          </details>
+        </section>
+
+        <p id="kitchen-status" class="status" role="status"></p>
+
+        <section aria-labelledby="kitchen-eaten-title">
+          <h3 id="kitchen-eaten-title">Eaten today</h3>
+          <p id="kitchen-empty" class="hint">Nothing logged yet today.</p>
+          <ul id="food-entries" class="log-list"></ul>
+        </section>
+
+        <button type="button" id="kitchen-close" class="secondary">Back to the kitchen</button>
+      </div>
+    </div>
+
+    <div id="gym-overlay" class="overlay" hidden>
+      <div
+        id="gym-panel"
+        class="panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="gym-title"
+        tabindex="-1"
+      >
+        <h2 id="gym-title">Gym</h2>
+        <p class="hint">Log the sets you just did. Use 0 lb for bodyweight exercises.</p>
+
+        <form id="workout-form" novalidate>
+          <div id="exercise-choice">
+            <label for="exercise">Exercise</label>
+            <select id="exercise" name="exercise" aria-describedby="last-time"></select>
+          </div>
+
+          <div id="cable-picker" hidden>
+            <div id="cable-chosen" class="chosen-exercise" hidden>
+              <span class="chosen-label">Exercise</span>
+              <span id="cable-chosen-name" class="chosen-name"></span>
+              <button type="button" id="cable-change" class="secondary small">Change</button>
+            </div>
+
+            <div id="cable-finder">
+              <label for="cable-search">Find your exercise</label>
+              <input
+                id="cable-search"
+                type="search"
+                placeholder="e.g. row, rope, or triceps"
+                autocomplete="off"
+                enterkeyhint="search"
+                aria-controls="cable-results"
+                aria-describedby="cable-search-status"
+              />
+              <p id="cable-search-status" class="hint search-status" aria-live="polite"></p>
+              <ul id="cable-results" class="food-results exercise-results"></ul>
+
+              <details id="custom-exercise">
+                <summary>Not on the list? Add your own</summary>
+                <label for="custom-exercise-name">Exercise name</label>
+                <input
+                  id="custom-exercise-name"
+                  type="text"
+                  maxlength="60"
+                  autocomplete="off"
+                  aria-describedby="error-custom-exercise"
+                />
+                <label for="custom-exercise-motion">Which motion is it closest to?</label>
+                <select id="custom-exercise-motion" aria-describedby="error-custom-exercise">
+                  <option value="">Choose one…</option>
+                </select>
+                <p class="error" id="error-custom-exercise"></p>
+                <button type="button" id="custom-exercise-add" class="secondary">
+                  Add it and pick it
+                </button>
+              </details>
+            </div>
+          </div>
+
+          <p id="last-time" class="last-time" aria-live="polite"></p>
+
+          <fieldset aria-describedby="error-workout">
+            <legend class="visually-hidden">Sets, reps, and weight</legend>
+            <div class="row">
+              <label class="stacked">
+                Sets
+                <input name="sets" type="number" inputmode="numeric" min="1" />
+              </label>
+              <label class="stacked">
+                Reps
+                <input name="reps" type="number" inputmode="numeric" min="1" />
+              </label>
+              <label class="stacked">
+                Weight (lb)
+                <input name="weight" type="number" inputmode="decimal" />
+              </label>
+            </div>
+          </fieldset>
+          <p class="error" id="error-workout"></p>
+
+          <button type="submit" class="primary">Log it</button>
+        </form>
+
+        <p id="gym-status" class="status" role="status"></p>
+
+        <section aria-labelledby="gym-today-title">
+          <h3 id="gym-today-title">Today's workout</h3>
+          <p id="gym-burn" class="hint"></p>
+          <p id="gym-empty" class="hint">No sets logged yet today.</p>
+          <ul id="workout-entries" class="log-list"></ul>
+        </section>
+
+        <button type="button" id="gym-close" class="secondary">Back to the gym</button>
+      </div>
+    </div>
+
+    <div id="treadmill-overlay" class="overlay split-view" hidden>
+      <div
+        id="treadmill-panel"
+        class="panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="treadmill-title"
+        tabindex="-1"
+      >
+        <h2 id="treadmill-title">Treadmill</h2>
+        <p class="hint">Log the cardio you did. Its calories are added to today's food target.</p>
+
+        <form id="cardio-form" novalidate>
+          <label for="cardio-pace">How hard did you go?</label>
+          <select id="cardio-pace" name="pace" aria-describedby="error-cardio">
+            <option value="">Choose one…</option>
+          </select>
+
+          <label for="cardio-minutes">Minutes</label>
+          <input
+            id="cardio-minutes"
+            name="minutes"
+            type="number"
+            inputmode="numeric"
+            min="1"
+            aria-describedby="error-cardio"
+          />
+          <fieldset id="cardio-custom" hidden>
+            <legend class="visually-hidden">Your speed and incline</legend>
+            <div class="row">
+              <label class="stacked">
+                Speed (mph)
+                <input
+                  id="cardio-speed"
+                  name="speed"
+                  type="number"
+                  inputmode="decimal"
+                  min="0.5"
+                  step="0.1"
+                  aria-describedby="error-cardio"
+                />
+              </label>
+              <label class="stacked">
+                Incline (%)
+                <input
+                  id="cardio-incline"
+                  name="incline"
+                  type="number"
+                  inputmode="decimal"
+                  min="0"
+                  step="0.5"
+                  aria-describedby="error-cardio"
+                />
+              </label>
+            </div>
+          </fieldset>
+          <p class="error" id="error-cardio"></p>
+          <p id="cardio-preview" class="portion-preview" aria-live="polite"></p>
+
+          <button type="submit" class="primary">Log it</button>
+        </form>
+
+        <p id="treadmill-status" class="status" role="status"></p>
+
+        <section aria-labelledby="cardio-today-title">
+          <h3 id="cardio-today-title">Today's cardio</h3>
+          <p id="cardio-burn" class="hint"></p>
+          <p id="cardio-empty" class="hint">No cardio logged yet today.</p>
+          <ul id="cardio-entries" class="log-list"></ul>
+        </section>
+
+        <button type="button" id="treadmill-close" class="secondary">Back to the gym</button>
+      </div>
+    </div>
+
+  </body>
+</html>
