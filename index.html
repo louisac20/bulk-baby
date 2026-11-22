@@ -10,8 +10,8 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
     />
-    <script type="module" crossorigin src="./assets/index-CwMFV_Dc.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-CNmNhqqU.css">
+    <script type="module" crossorigin src="./assets/index-DRlLj9hH.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-DOTHURHa.css">
   </head>
   <body>
     <div id="game"></div>
@@ -106,6 +106,37 @@
         </section>
 
         <button type="button" id="scanner-close" class="secondary">Back to the map</button>
+      </div>
+    </div>
+
+    <div id="progress-overlay" class="overlay" hidden>
+      <div
+        id="progress-panel"
+        class="panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="progress-title"
+        tabindex="-1"
+      >
+        <h2 id="progress-title">Progress</h2>
+        <p class="hint">
+          Each bar is one day, with today on the right. The dashed line is that day's target, and a
+          green bar reached it.
+        </p>
+        <div class="range-switch" role="group" aria-label="How far back to show">
+          <button type="button" id="progress-week" class="range-button" aria-pressed="true">
+            7 days
+          </button>
+          <button type="button" id="progress-month" class="range-button" aria-pressed="false">
+            30 days
+          </button>
+        </div>
+        <p id="progress-no-scan" class="hint" hidden>
+          Scan yourself at the Lab scanner to see your targets on the charts.
+        </p>
+        <p id="progress-empty" class="hint" hidden></p>
+        <div id="progress-charts"></div>
+        <button type="button" id="progress-close" class="secondary">Back to the lab</button>
       </div>
     </div>
 
