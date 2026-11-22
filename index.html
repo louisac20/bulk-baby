@@ -10,8 +10,8 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
     />
-    <script type="module" crossorigin src="./assets/index-DkJEJyhb.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-iEJezkCC.css">
+    <script type="module" crossorigin src="./assets/index-CwMFV_Dc.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-CNmNhqqU.css">
   </head>
   <body>
     <div id="game"></div>
@@ -128,6 +128,35 @@
           <p id="kitchen-no-targets" class="hint" hidden>
             Visit the Lab scanner to set your targets.
           </p>
+        </section>
+
+        <section aria-labelledby="kitchen-water-title">
+          <h3 id="kitchen-water-title">Water today</h3>
+          <p id="water-progress" class="water-progress"></p>
+          <div class="row">
+            <button type="button" id="water-add-glass" class="secondary">+ Glass (8 oz)</button>
+            <button type="button" id="water-add-bottle" class="secondary">
+              + Bottle (16.9 oz)
+            </button>
+          </div>
+          <form id="water-custom-form" class="search-row water-custom" novalidate>
+            <label for="water-custom-amount" class="visually-hidden">
+              Custom amount of water, in ounces
+            </label>
+            <input
+              id="water-custom-amount"
+              type="number"
+              inputmode="decimal"
+              min="0"
+              step="any"
+              placeholder="Other amount (oz)"
+              aria-describedby="error-water"
+            />
+            <button type="submit" class="primary">Add</button>
+          </form>
+          <p class="error" id="error-water"></p>
+          <button type="button" id="water-remove-last" class="secondary">Remove last</button>
+          <p id="water-status" class="status" role="status"></p>
         </section>
 
         <section aria-labelledby="kitchen-add-title">
