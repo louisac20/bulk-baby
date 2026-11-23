@@ -10,11 +10,11 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
     />
-    <script type="module" crossorigin src="./assets/index-BXKOlW7r.js"></script>
+    <script type="module" crossorigin src="./assets/index-Jl5UfLSk.js"></script>
     <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-WkwZ5CU-.js">
     <link rel="modulepreload" crossorigin href="./assets/phaser-CmOm-Ik1.js">
     <link rel="modulepreload" crossorigin href="./assets/firebase-B1WM_vw9.js">
-    <link rel="stylesheet" crossorigin href="./assets/index-6DbV1ol9.css">
+    <link rel="stylesheet" crossorigin href="./assets/index-DjXOocKt.css">
   </head>
   <body>
     <div id="game"></div>
@@ -146,7 +146,8 @@
         <h2 id="progress-title">Progress</h2>
         <p class="hint">
           Each bar is one day, with today on the right. The dashed line is that day's target, and a
-          green bar reached it.
+          green bar reached it. On the body weight chart, each dot is a weigh-in, and the dashed
+          line is your chosen pace.
         </p>
         <div class="range-switch" role="group" aria-label="How far back to show">
           <button type="button" id="progress-week" class="range-button" aria-pressed="true">
@@ -162,6 +163,41 @@
         <p id="progress-empty" class="hint" hidden></p>
         <div id="progress-charts"></div>
         <button type="button" id="progress-close" class="secondary">Back to the lab</button>
+      </div>
+    </div>
+
+    <div id="scale-overlay" class="overlay" hidden>
+      <div
+        id="scale-panel"
+        class="panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="scale-title"
+        tabindex="-1"
+      >
+        <h2 id="scale-title">Scale</h2>
+        <p class="hint">
+          Weigh yourself and enter it here, ideally at the same time each day, like first thing in
+          the morning. Your daily targets update to match, and your weight goes on the progress
+          monitor.
+        </p>
+        <p id="scale-last" class="last-time"></p>
+        <form id="scale-form" novalidate>
+          <label for="scale-weight">Today's weight (lb)</label>
+          <div class="search-row">
+            <input
+              id="scale-weight"
+              type="number"
+              inputmode="decimal"
+              step="any"
+              aria-describedby="error-scale"
+            />
+            <button type="submit" class="primary">Save</button>
+          </div>
+          <p class="error" id="error-scale" role="alert"></p>
+        </form>
+        <p id="scale-status" class="status" role="status"></p>
+        <button type="button" id="scale-close" class="secondary">Back to the lab</button>
       </div>
     </div>
 
