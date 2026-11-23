@@ -10,15 +10,37 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
     />
-    <script type="module" crossorigin src="./assets/index-DRlLj9hH.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-DOTHURHa.css">
+    <script type="module" crossorigin src="./assets/index-q_Gpz0Fr.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-6DbV1ol9.css">
   </head>
   <body>
     <div id="game"></div>
 
     <div id="hud">
-      <p id="hud-targets" class="hud-pill"></p>
+      <div class="hud-top">
+        <p id="hud-targets" class="hud-pill"></p>
+        <button id="account-button" class="hud-pill account-button" type="button" hidden></button>
+      </div>
       <p id="hud-hint" class="hud-pill"></p>
+    </div>
+
+    <div id="account-overlay" class="overlay" hidden>
+      <div
+        id="account-panel"
+        class="panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="account-title"
+        tabindex="-1"
+      >
+        <h2 id="account-title">Bulk Baby</h2>
+        <p id="account-message" class="hint"></p>
+        <button id="account-sign-in" class="primary" type="button">Sign in with Google</button>
+        <button id="account-guest" class="secondary" type="button">Play without an account</button>
+        <button id="account-sign-out" class="secondary" type="button">Sign out</button>
+        <button id="account-close" class="secondary" type="button">Close</button>
+        <p id="account-error" class="error" role="alert"></p>
+      </div>
     </div>
 
     <div id="scanner-overlay" class="overlay" hidden>
