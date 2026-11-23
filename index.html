@@ -10,11 +10,11 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
     />
-    <script type="module" crossorigin src="./assets/index-Jl5UfLSk.js"></script>
+    <script type="module" crossorigin src="./assets/index-BqS4v7ea.js"></script>
     <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-WkwZ5CU-.js">
     <link rel="modulepreload" crossorigin href="./assets/phaser-CmOm-Ik1.js">
-    <link rel="modulepreload" crossorigin href="./assets/firebase-B1WM_vw9.js">
-    <link rel="stylesheet" crossorigin href="./assets/index-DjXOocKt.css">
+    <link rel="modulepreload" crossorigin href="./assets/firebase-Cay07gWN.js">
+    <link rel="stylesheet" crossorigin href="./assets/index-CfVVGeaJ.css">
   </head>
   <body>
     <div id="game"></div>
@@ -163,6 +163,54 @@
         <p id="progress-empty" class="hint" hidden></p>
         <div id="progress-charts"></div>
         <button type="button" id="progress-close" class="secondary">Back to the lab</button>
+      </div>
+    </div>
+
+    <div id="trophy-overlay" class="overlay" hidden>
+      <div
+        id="trophy-panel"
+        class="panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="trophy-title"
+        tabindex="-1"
+      >
+        <h2 id="trophy-title">Trophy Board</h2>
+        <p class="hint">
+          Who reached their calorie target on the most of the last 7 days? Friends see only your
+          first name and which days you hit your target, never your logs.
+        </p>
+        <p id="trophy-guest" class="hint" hidden>
+          Sign in to compete with friends: tap Guest at the top of the screen.
+        </p>
+        <div id="trophy-account">
+          <p id="trophy-status" class="hint" role="status"></p>
+          <ol id="trophy-list" class="trophy-list"></ol>
+          <h3>Add a friend</h3>
+          <div class="friend-code-row">
+            <span>Your friend code:</span>
+            <strong id="trophy-code" class="friend-code">…</strong>
+            <button type="button" id="trophy-copy" class="secondary small">Copy</button>
+          </div>
+          <p class="hint">Give your code to a friend, or type theirs below.</p>
+          <form id="trophy-add-form" class="search-row" novalidate>
+            <label for="trophy-friend-code" class="visually-hidden">Friend's code</label>
+            <input
+              id="trophy-friend-code"
+              type="text"
+              autocomplete="off"
+              autocapitalize="characters"
+              spellcheck="false"
+              maxlength="12"
+              placeholder="Friend's code"
+              aria-describedby="error-trophy"
+            />
+            <button type="submit" class="primary">Add</button>
+          </form>
+          <p class="error" id="error-trophy" role="alert"></p>
+          <p id="trophy-added" class="status" role="status"></p>
+        </div>
+        <button type="button" id="trophy-close" class="secondary">Back to the gym</button>
       </div>
     </div>
 
